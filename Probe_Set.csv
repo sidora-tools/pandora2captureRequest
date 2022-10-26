@@ -1,0 +1,40 @@
+﻿Name,Short_Name,Description,MPI_Probe_Pool
+1240k,TF,,AA213.
+16S-rRNA,SR,,NA
+Archaic Admixture,AA,,AA108-AA115.
+Big Yoruba,BY,,NA
+Borrelia/Borreliella,BO,,AA256.
+Brucella,BR,"brucella_2022_v1
+AA284-AA287",AA284-AA287.
+Candida albicans,CB,,AA251.
+Canid,CA,,AA252.
+Capra (goat),GT,Jeong_Capra_2021v1,AA277-AA280.
+Cowpox,CP,,AA229.
+Fermentation (bacteria),FB,,AA235-AA237.
+Fermentation (yeast),FY,,AA238-AA240.
+Helicobacter pylori,HP,,AA243.
+Hepatitis B,HB,,AA250.
+Human Screening,HS,,NA
+Immunocapture,IM,,AA242.
+Mitochondrial,MT,,NA
+Mitochondrial Bison,MB,,NA
+Mitochondrial_cow (Tübingen),MC,,NA
+Mitochondrial_deer (Tübingen),MD,,NA
+Mix Mitochondrial/Human Screening,MH,,NA
+Mycobacterium leprae,ML,,AA244.
+Mycobacterium tuberculosis,TB,,AA241.
+oralStrep-ABP,AB,,AA253.
+oralStrep-genomes,ST,,AA254.
+Ovis (sheep),SH,Jeong_Capra_2021v1,AA273-AA276.
+Parvovirus B19,PV,,AA255.
+Plasmodium Mitogenome,PM,,AA257.
+Plasmodium Nuclear,PN,,AA232-AA234.
+Plasmodium Plastid (Apicoplast),PP,,AA258.
+Salmonella enterica,SE,,AA231.
+Staphylococcus aureus,SA,,AA248.
+Streptococcus mutans,SM,,AA249.
+Streptococcus pyogenes,SP,,AA247.
+Treponema pallidum,TP,,AA245.
+Treponema succinifaciens,TS,trepSucc_2021_v1,AA281-AA283.
+Y-Chromosom,YC,,AA246.
+Yersinia pestis,YP,,AA230.
