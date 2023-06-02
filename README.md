@@ -32,3 +32,5 @@ BIN003.A0101,1240k,HiSeq4000 75 SR,20M,Project,Lab
 BIN019.A0101,1240k,HiSeq4000 75 SR,20M,Project,Lab
 BIN022.A0101,1240k,HiSeq4000 75 SR,20M,Project,Lab
 ```
+
+Note: You will require to have a ```Probe_set.csv``` file where the script is running. Please get in contact with @aidaanva to receive it!
