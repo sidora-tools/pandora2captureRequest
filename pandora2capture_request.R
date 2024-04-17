@@ -12,15 +12,9 @@ require(optparse)
 require(readr)
 require(stringr)
 
+Probe_Sets_Jena_CoreUnit <- read.csv("Probe_Set.csv")
+
 validate_csv <- function(csv) {
-  probe_set <- c("1240k","16S-rRNA","Archaic Admixture","Big Yoruba","Borrelia/Borreliella","Brucella","Candida albicans",
-                 "Canid","Capra (goat)","Cowpox","Fermentation (bacteria)","Fermentation (yeast)","Helicobacter pylori",
-                 "Hepatitis B","Human Screening","Immunocapture","Mitochondrial","Mitochondrial Bison",
-                 "Mitochondrial_cow (Tübingen)","Mitochondrial_deer (Tübingen)","Mix Mitochondrial/Human Screening",
-                 "Mycobacterium leprae","Mycobacterium tuberculosis","oralStrep-ABP","oralStrep-genomes","Ovis (sheep)",
-                 "Parvovirus B19","Plasmodium Mitogenome","Plasmodium Nuclear","Plasmodium Plastid (Apicoplast)","Salmonella enterica",
-                 "Staphylococcus aureus","Streptococcus mutans","Streptococcus pyogenes","Treponema pallidum",
-                 "Treponema succinifaciens","Y-Chromosom","Yersinia pestis")
   labs <- c("CoreUnit","JenaLab")
   sequencing_kits <- c("HiSeq4000 75 SR","HiSeq4000 75 PE**","HiSeq4000 150 PE**",
                      "Flex 75 PE*", "Flex 75 SR*",
@@ -33,7 +27,7 @@ validate_csv <- function(csv) {
                      "NovaSeqX 75 PE*",
                      "NovaSeqX 100PE*")
   sequencing_depths <- c("1M","2M","5M","10M","20M", "40M")
-  incorrect_probe <- csv %>% filter(!Probe_Set %in% probe_set) %>% pull(Probe_Set)
+  incorrect_probe <- csv %>% filter(!Probe_Set %in% Probe_Sets_Jena_CoreUnit$Name) %>% pull(Probe_Set)
   incorrect_lab <- csv %>% filter(!Lab %in% labs) %>% pull(Lab)
   incorrect_kit <- csv %>% filter(!Sequencing_Kit %in% sequencing_kits) %>% pull(Sequencing_Kit)
   incorrect_depth <- csv %>% filter(!Sequencing_Depth %in% sequencing_depths) %>% pull(Sequencing_Depth)
@@ -64,53 +58,6 @@ validate_csv <- function(csv) {
   }
 }
 
-validate_probe_set <- function(csv) {
-  valid_entries <- c("1240k","16S-rRNA","Archaic Admixture","Big Yoruba","Borrelia/Borreliella","Brucella","Candida albicans",
-                     "Canid","Capra (goat)","Cowpox","Fermentation (bacteria)","Fermentation (yeast)","Helicobacter pylori",
-                     "Hepatitis B","Human Screening","Immunocapture","Mitochondrial","Mitochondrial Bison",
-                     "Mitochondrial_cow (Tübingen)","Mitochondrial_deer (Tübingen)","Mix Mitochondrial/Human Screening",
-                     "Mycobacterium leprae","Mycobacterium tuberculosis","oralStrep-ABP","oralStrep-genomes","Ovis (sheep)",
-                     "Parvovirus B19","Plasmodium Mitogenome","Plasmodium Nuclear","Plasmodium Plastid (Apicoplast)","Salmonella enterica",
-                     "Staphylococcus aureus","Streptococcus mutans","Streptococcus pyogenes","Treponema pallidum",
-                     "Treponema succinifaciens","Y-Chromosom","Yersinia pestis")
-  incorrect <- csv %>% filter(!probe_set %in% valid_entries)
-  ifelse(nrow(incorrect) > 0, stop(call.=F, "\n[pandora2capture_request.R] error: Invalid sequencing kit: '", incorrect$Probe_Set, 
-                                   "'\nAccepted values: ", paste(valid_entries,collapse=", "),"\n\n"), incorrect)
-  }
-
-validate_lab <- function(value) {
-  valid_entries <- c("CoreUnit","JenaLab") 
-  ifelse(value %in% valid_entries, return(value), stop(call.=F, "\n[pandora2capture_request.R] error: Invalid lab: '", value, 
-                                                       "'\nAccepted values: ", paste(valid_entries,collapse=", "),"\n\n"))
-}
-
-validate_kit <- function(csv) {
-  valid_entries <- c("HiSeq4000 75 SR","HiSeq4000 75 PE**","HiSeq4000 150 PE**",
-                     "Flex 75 PE*", 
-                     "Flex 75 SR*",
-                     "MiSeqNano 150 PE", 
-                     "MiSeqMicro 150 PE","MiSeq 75 PE", "MiSeq 150 PE","MiSeq 300 PE", 
-                     "NextSeq500MO 75 PE", "NextSeq500MO 75 SR", 
-                     "NextSeq500MO 150 SR", "NextSeq500MO 150 PE**", 
-                     "NextSeq500HO 75 PE**", "NextSeq500HO 75 SR**",
-                     "NextSeq500HO 150 PE**",
-                     "NovaSeqX 75 PE*",
-                     "NovaSeqX 100PE*")
-  incorrect <- csv %>% filter(!Sequencing_Kit %in% valid_entries)
-  ifelse(nrow(incorrect) > 0, stop(call.=F, "\n[pandora2capture_request.R] error: Invalid sequencing kit: '", incorrect$Sequencing_Kit, 
-                                                       "'\nAccepted values: ", paste(valid_entries,collapse=", "),"\n\n"), return(incorrect))
-}
-
-validate_depth <- function(value) { 
-  valid_entries <- c("1M","2M","5M","10M","20M", "40M")
-  incorrect <- csv %>% filter(!Sequencing_Depth %in% valid_entries)
-  ifelse(nrow(incorrect) > 0, stop(call.=F, "\n[pandora2capture_request.R] error: Invalid sequencing kit: '", incorrect$Sequencing_Kit, 
-                                   "'\nAccepted values: ", paste(valid_entries,collapse=", "),"\n\n"), return(incorrect))
-  
-  ifelse(value %in% valid_entries, return(value), stop(call.=F, "\n[pandora2capture_request.R] error: Invalid depth: '", value, 
-                                                       "'\nAccepted values: ", paste(valid_entries,collapse=", "),"\n\n"))
-}
-
 validate_libraries <- function(option, opt_str, value, parser) {
   ifelse(!is.na(value), 
          return(value), 
@@ -138,7 +85,7 @@ parser <- add_option(parser, c("-o", "--outDir"), type = 'character',
                      help= "The desired output directory. By default, it is the current directory.",
                      default = "."
                      )
-parser <- add_option(parser, c("-v", "--version"), action= 'store_true', default=TRUE, help = "Prints version")
+parser <- add_option(parser, c("-v", "--version"), action= 'store_true', default=FALSE, help = "Prints version")
 
 arguments <- parse_args(parser, positional_arguments = 1)
 opts <- arguments$options
@@ -151,17 +98,10 @@ if( opts$version == TRUE ) {
 cred_file <- arguments$args
 libraries <- read.csv(opts$file_libraries_id, header = T)
 
-#libraries
-
 #Check all columns contain correct information: 
 validate_csv(libraries)
 
-#probe_set <- opts$probe_set
-#lab <- opts$lab
 contact <- paste(opts$researcher, opts$email, sep = ",")
-#kit <- opts$kit
-#depth <- opts$depth
-#costCenter <- opts$costCenter
 requestDate <- Sys.Date()
 
 con <- sidora.core::get_pandora_connection(cred_file)
@@ -208,15 +148,15 @@ if (nrow(JenaLab) > 0) {
       additional_notes = "",
            ) %>%
     select(!contains("library.")) %>%
-    select(!contains(c("Sequencing_Kit","Sequencing_Depth","Cost_Center","Lab", "MPI_Probe_Pool"))) %>%
+    select(!contains(c("Sequencing_Kit","Sequencing_Depth","Cost_Center","Lab", "MPI_probe_pool"))) %>%
     relocate(Probe_Set, .after = Protocol)
   nameOutput <- paste(paste("CaptureRequest","JenaLab",requestDate, sep = "_"),"tsv",sep = ".")
   outputTSV <- paste(opts$outdir,nameOutput, sep = "/")
   write_tsv(JenaTSV, file = outputTSV)
 } 
 if (nrow(CoreUnit) > 0) {
-  Probe_Sets_Core_Unit <- read.csv("Probe_Set.csv") %>%
-    select(Name,MPI_Probe_Pool)
+  Probe_Sets_Core_Unit <- Probe_Sets_Jena_CoreUnit %>%
+    select(Name,MPI_probe_pool)
   code_probe_set <- Probe_Sets_Core_Unit %>%
     filter(Name %in% CoreUnit$Probe_Set)
   CoreUnitTSV <- libraryTab %>%
@@ -256,7 +196,7 @@ if (nrow(CoreUnit) > 0) {
       Capture = "yes",
       Plate_ID_Pandora_batch_ID_Capture = library.Batch,
       Plate_position_Capture = library.Position_on_Plate,
-      ProbeSet = MPI_Probe_Pool, 
+      ProbeSet = MPI_probe_pool, 
       Comments_Capture = "",
       Capture_Sequencing = "yes",
       Sequencing_depth_Capture = Sequencing_Depth,	
@@ -269,7 +209,7 @@ if (nrow(CoreUnit) > 0) {
       Comments_Aliquoting = ""
     ) %>%
     select(!contains("library.")) %>%
-    select(!contains(c("Sequencing_Kit","Cost_Center","Lab", "MPI_Probe_Pool"))) %>%
+    select(!contains(c("Sequencing_Kit","Cost_Center","Lab", "MPI_probe_pool"))) %>%
     select(-Sequencing_Depth) %>%
     select(-Probe_Set)
   nameOutput <- paste(paste("CaptureRequest","CoreUnit",requestDate, sep = "_"),"tsv",sep = ".")
