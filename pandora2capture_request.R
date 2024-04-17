@@ -29,7 +29,9 @@ validate_csv <- function(csv) {
                      "NextSeq500MO 75 PE", "NextSeq500MO 75 SR", 
                      "NextSeq500MO 150 SR", "NextSeq500MO 150 PE**", 
                      "NextSeq500HO 75 PE**", "NextSeq500HO 75 SR**",
-                     "NextSeq500HO 150 PE**")
+                     "NextSeq500HO 150 PE**",
+                     "NovaSeqX 75 PE*",
+                     "NovaSeqX 100PE*")
   sequencing_depths <- c("1M","2M","5M","10M","20M", "40M")
   incorrect_probe <- csv %>% filter(!Probe_Set %in% probe_set) %>% pull(Probe_Set)
   incorrect_lab <- csv %>% filter(!Lab %in% labs) %>% pull(Lab)
@@ -84,13 +86,16 @@ validate_lab <- function(value) {
 
 validate_kit <- function(csv) {
   valid_entries <- c("HiSeq4000 75 SR","HiSeq4000 75 PE**","HiSeq4000 150 PE**",
-                     "Flex 75 PE*", "Flex 75 SR*",
+                     "Flex 75 PE*", 
+                     "Flex 75 SR*",
                      "MiSeqNano 150 PE", 
                      "MiSeqMicro 150 PE","MiSeq 75 PE", "MiSeq 150 PE","MiSeq 300 PE", 
                      "NextSeq500MO 75 PE", "NextSeq500MO 75 SR", 
                      "NextSeq500MO 150 SR", "NextSeq500MO 150 PE**", 
                      "NextSeq500HO 75 PE**", "NextSeq500HO 75 SR**",
-                     "NextSeq500HO 150 PE**")
+                     "NextSeq500HO 150 PE**",
+                     "NovaSeqX 75 PE*",
+                     "NovaSeqX 100PE*")
   incorrect <- csv %>% filter(!Sequencing_Kit %in% valid_entries)
   ifelse(nrow(incorrect) > 0, stop(call.=F, "\n[pandora2capture_request.R] error: Invalid sequencing kit: '", incorrect$Sequencing_Kit, 
                                                        "'\nAccepted values: ", paste(valid_entries,collapse=", "),"\n\n"), return(incorrect))
