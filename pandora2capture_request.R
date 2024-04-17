@@ -125,15 +125,6 @@ parser <- add_option(parser, c("-f", "--file_libraries_id"), type = 'character',
                      callback = validate_libraries,
                      help = "CSV file containing all the libraries ID, probe set, sequecing kit, sequencing depth, cost center and lab",
                      default = NA)
-#parser <- add_option(parser, c("-p", "--probe_set"), type = 'character',
-#                     action = "callback", dest = "probe_set",
-#                     callback = validate_probe_set, default=NA,
-#                     help = "The desired probe set for the capture. To see options run: pandora2capture_request.R  -p .credentials")
-#parser <- add_option(parser, c("-l", "--lab"), type = 'character',
-#                     action = "callback", dest = "lab",
-#                     callback = validate_lab, default=NA,
-#                     help = "The lab for which the capture request is for. Should be one of: 'CoreUnit';'JenaLab'."
-#                     )
 parser <- add_option(parser, c("-r", "--researcher"), type = 'character',
                      action = "store", dest = "researcher", default=NA,
                      help = "Name of the contact person for the request"
@@ -142,28 +133,20 @@ parser <- add_option(parser, c("-e", "--emailresearcher"), type = 'character',
                      action = "store", dest = "email", default=NA,
                      help = "Email of the contact person for the request"
                      )
-#parser <- add_option(parser, c("-k", "--kit_sequencing"), type = 'character',
-#                     action = "callback", dest = "kit",
-#                     callback = validate_kit, default=NA,
-#                     help = "The sequencing kit you will like to use. To see options run: pandora2capture_request.R  -k .credentials"
-#                     )
-#parser <- add_option(parser, c("-d", "--depth_sequencing"), type = 'character',
-#                     action = "callback", dest = "depth", 
-#                     callback = validate_depth, default="20M",
-#                     help = "The number of reads that you will like your captured library to be sequenced. By default the values is 20M reads. To see options run: pandora2capture_request.R  -d .credentials"
-#)
-#parser <- add_option(parser, c("-c", "--cost_center"), type = 'character',
-#                     action = "store", dest = "costCenter", default=NA,
-#                     help = "Specify the cost center. By default, this will correpond to the project in the library tab in pandora" #Default the project in Pandora, specify otherwise
-#)
 parser <- add_option(parser, c("-o", "--outDir"), type = 'character',
                      action = "store", dest = "outdir",
                      help= "The desired output directory. By default, it is the current directory.",
                      default = "."
                      )
+parser <- add_option(parser, c("-v", "--version"), action= 'store_true', default=TRUE, help = "Prints version")
 
 arguments <- parse_args(parser, positional_arguments = 1)
 opts <- arguments$options
+
+if( opts$version == TRUE ) {
+  print("[pandora2capture_request.R] version 1.0")
+  quit()
+}
 
 cred_file <- arguments$args
 libraries <- read.csv(opts$file_libraries_id, header = T)
