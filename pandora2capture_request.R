@@ -13,6 +13,7 @@ require(readr)
 require(stringr)
 
 Probe_Sets_Jena_CoreUnit <- read.csv("Probe_Set.csv")
+probe_set <- Probe_Sets_Jena_CoreUnit$Name
 
 validate_csv <- function(csv) {
   labs <- c("CoreUnit","JenaLab")
@@ -166,6 +167,7 @@ if (nrow(CoreUnit) > 0) {
     mutate(
       Sample_type_submitted = "Library",
       Account_name = ifelse(is.na(Cost_Center), library.Projects, as.character(Cost_Center)),
+      Project = library.Projects,
       Contact_person_email = contact,
       Core_Unit_MPI_EVA_ID = library.CoreDB_Id,
       Customer_PandoraID = library.Full_Library_Id,
